@@ -1,3 +1,5 @@
+import java.util.HashMap;
+
 public class Task {
     private String description;
     private boolean isDone;
@@ -9,7 +11,7 @@ public class Task {
 
     @Override
     public String toString() {
-        if (isDone) {
+        if (this.isDone) {
             return String.format("[X] %s.", description);
         }
         else {
@@ -23,5 +25,13 @@ public class Task {
 
     public void unmarkDone() {
         isDone = false;
+    }
+
+    public boolean isDone() {
+        return isDone;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }

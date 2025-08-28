@@ -30,7 +30,7 @@ public class Storage {
                 String[] data = line.split(" \\| ");
 
                 String type = data[0];
-                Boolean isDone = data[1].equals("1");
+                boolean isDone = data[1].equals("1");
                 String description = data[2];
 
                 Task task = null;

@@ -52,7 +52,7 @@ public class AddCommand extends Command {
             System.out.println(task);
             System.out.println("Now you have " + tasks.size() + " tasks in the list");
         } catch (DateTimeParseException e) {
-            ui.showError(e.getMessage());
+            ui.showError(e.getMessage() + "Time format should be: dd-MM-yyyy HHmm");
         }
 
     }

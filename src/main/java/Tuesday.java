@@ -1,4 +1,5 @@
 import java.io.FileNotFoundException;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -11,9 +12,6 @@ public class Tuesday {
     public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
-
-        System.out.println("Hello! I'm Tuesday");
-        System.out.println("What can I do for you?");
 
         // Initiate a list
         List<Task> list = new ArrayList<>();
@@ -48,7 +46,8 @@ public class Tuesday {
                     task = new DeadlineTask(description, data[3]);
                     break;
                 case "E":
-                    task = new EventTask(description, data[3], "");
+                    String[] timeData = data[3].split("to");
+                    task = new EventTask(description, timeData[0], timeData[1]);
                     break;
                 default:
                     throw new IllegalArgumentException("Invalid type");
@@ -63,12 +62,16 @@ public class Tuesday {
         }
         System.out.println("Data loaded successfully!");
 
+        System.out.println("Hello! I'm Tuesday");
+        System.out.println("What can I do for you?");
+        System.out.println("Start with 'todo', 'deadline' or 'event' + 'task_description' + 'time' to create respective task");
+        System.out.println("Start with 'mark' or 'unmark' + 'task_index' to change status of the task ");
+        System.out.println("Time format should be: dd-MM-yyyy HHmm" );
 
         while (true) {
             try {
                 String input = sc.nextLine();
                 if (input.equals("bye")) {
-
                     try {
                         System.out.println("Saving data...");
                         FileWriter fw = new FileWriter(filePath);
@@ -95,13 +98,13 @@ public class Tuesday {
                 } else if (input.equals("What the date today")) {
                     LocalDate now = LocalDate.now();
                     System.out.println(now);
-                } else if (input.startsWith("mark ")) {
+                } else if (input.startsWith("mark")) {
                     int taskIndex = Integer.parseInt(input.split(" ")[1]);
                     Task task = list.get(taskIndex - 1);
                     task.markDone();
                     System.out.println("Nice! I've marked this task as done:");
                     System.out.println(task.toString());
-                } else if (input.startsWith("unmark ")) {
+                } else if (input.startsWith("unmark")) {
                     int taskIndex = Integer.parseInt(input.split(" ")[1]);
                     Task task = list.get(taskIndex - 1);
                     task.unmarkDone();
@@ -135,11 +138,16 @@ public class Tuesday {
 
                     String content = input.substring(9);
                     String[] splitContent = content.split(" /by ", 2);
-                    Task task = new DeadlineTask(splitContent[0], splitContent[1]);
-                    list.add(task);
-                    System.out.println("Got it. I've added this task:");
-                    System.out.println(task.toString());
-                    System.out.println("Now you have " + list.size() + " tasks in the list");
+                    try {
+                        Task task = new DeadlineTask(splitContent[0], splitContent[1]);
+                        list.add(task);
+                        System.out.println("Got it. I've added this task:");
+                        System.out.println(task.toString());
+                        System.out.println("Now you have " + list.size() + " tasks in the list");
+                    } catch (DateTimeParseException e) {
+                        System.out.println("Invalid date format. Correct deadline date format: /by dd-MM-yyyy HHmm");
+
+                    }
                 } else if (input.startsWith("event")) {
                     if (input.trim().equals("event")) {
                         throw new TuesdayException("ERROR: Missing deadline task content!");
@@ -147,15 +155,19 @@ public class Tuesday {
                     if (!input.contains("/from") || !input.contains("/to")) {
                         throw new TuesdayException("ERROR: Missing event start or end time for task content!");
                     }
-
                     String content = input.substring(6);
                     String regex = "/from | /to";
                     String[] splitContent = content.split(regex);
-                    Task task = new EventTask(splitContent[0], splitContent[1], splitContent[2].trim());
-                    list.add(task);
-                    System.out.println("Got it. I've added this task:");
-                    System.out.println(task.toString());
-                    System.out.println("Now you have " + list.size() + " tasks in the list");
+                    try {
+                        Task task = new EventTask(splitContent[0], splitContent[1], splitContent[2].trim());
+                        list.add(task);
+                        System.out.println("Got it. I've added this task:");
+                        System.out.println(task.toString());
+                        System.out.println("Now you have " + list.size() + " tasks in the list");
+                    } catch (DateTimeParseException e) {
+                        System.out.println("Invalid date format. Correct event date format: /from dd-MM-yyyy HHmm /to dd-MM-yyyy");
+                    }
+
                 } else if (input.equals("list")) {
                     System.out.println("Here are the tasks in your list:");
                     for (int i = 0; i < list.size(); i++) {
@@ -173,6 +185,5 @@ public class Tuesday {
             }
         }
         sc.close();
-
     }
 }

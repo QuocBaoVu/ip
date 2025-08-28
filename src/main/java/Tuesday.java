@@ -1,7 +1,11 @@
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.time.LocalDate;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Tuesday {
     public static void main(String[] args) {
@@ -11,12 +15,81 @@ public class Tuesday {
         System.out.println("Hello! I'm Tuesday");
         System.out.println("What can I do for you?");
 
+        // Initiate a list
         List<Task> list = new ArrayList<>();
+
+        // Load data from data/tuesday.txt to list
+        String projectPath = System.getProperty("user.dir");
+        String filePath = projectPath+"/data/tuesday.txt";
+        File file = new File(filePath);
+
+        try (Scanner fileScanner = new Scanner(file))  {
+            // Load data process
+            System.out.println("Loading data...");
+            while (fileScanner.hasNextLine()) {
+                String line = fileScanner.nextLine().trim();
+                if (line.isEmpty()) {
+                    continue; // Skip empty line
+                }
+                // Split by " | "
+                String[] data = line.split(" \\| ");
+
+                String type = data[0];
+                Boolean isDone = data[1].equals("1");
+                String description = data[2];
+
+                Task task = null;
+
+                switch (type) {
+                case "T":
+                    task = new TodoTask(description);
+                    break;
+                case "D":
+                    task = new DeadlineTask(description, data[3]);
+                    break;
+                case "E":
+                    task = new EventTask(description, data[3], "");
+                    break;
+                default:
+                    throw new IllegalArgumentException("Invalid type");
+                }
+                if (isDone) {
+                    task.markDone();
+                }
+                list.add(task);
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found");
+        }
+        System.out.println("Data loaded successfully!");
+
 
         while (true) {
             try {
                 String input = sc.nextLine();
                 if (input.equals("bye")) {
+
+                    try {
+                        System.out.println("Saving data...");
+                        FileWriter fw = new FileWriter(filePath);
+                        for (Task task : list) {
+                            switch (task.getType()) {
+                                case "T":
+                                    fw.write(String.format("T | %s | %s\n", task.isDone() ? 1 : 0, task.getDescription()));
+                                    break;
+                                case "D":
+                                    fw.write(String.format("D | %s | %s | %s\n", task.isDone() ? 1 : 0, task.getDescription(), task.getTime()));
+                                    break;
+                                case "E":
+                                    fw.write(String.format("E | %s | %s | %s\n", task.isDone() ? 1 : 0, task.getDescription(), task.getTime()));
+                                    break;
+                            }
+                        }
+                        fw.close();
+                    } catch (IOException e) {
+                        System.out.println("Something went wrong: " + e.getMessage());
+                    }
+                    System.out.println("Data saved successfully!");
                     System.out.println("Bye. Hope to see you again soon!");
                     break;
                 } else if (input.equals("What the date today")) {

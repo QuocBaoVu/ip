@@ -1,6 +1,6 @@
 import java.util.HashMap;
 
-public class Task {
+public abstract class Task {
     private String description;
     private boolean isDone;
 
@@ -30,6 +30,10 @@ public class Task {
     public boolean isDone() {
         return isDone;
     }
+
+    abstract String getType();
+
+    abstract String getTime();
 
     public String getDescription() {
         return description;

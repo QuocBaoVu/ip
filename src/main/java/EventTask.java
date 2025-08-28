@@ -6,7 +6,12 @@ public class EventTask extends Task{
         this.start = start;
         this.end = end;
     }
-
+    public String getType() {
+        return "E";
+    }
+    public String getTime() {
+        return this.start + " " + this.end;
+    }
     @Override
     public String toString() {
         if (this.isDone()) {

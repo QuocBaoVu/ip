@@ -6,6 +6,13 @@ public class DeadlineTask extends Task {
         super(description);
         this.deadline = deadline;
     }
+    public String getType() {
+        return "D";
+    }
+
+    public String getTime() {
+        return deadline;
+    }
 
     @Override
     public String toString() {

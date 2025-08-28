@@ -11,11 +11,6 @@ public class TodoTask extends Task {
         return "";
     };
     @Override public String toString(){
-        if (this.isDone()) {
-            return String.format("[T][X] %s", this.getDescription());
-        }
-        else {
-            return String.format("[T][ ] %s", this.getDescription());
-        }
+            return String.format("[T][%s] %s", this.isDone() ? "X" : "" ,this.getDescription());
     }
 }

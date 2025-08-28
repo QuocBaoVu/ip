@@ -1,3 +1,12 @@
+package tuesday;
+
+import tuesday.command.Command;
+import tuesday.exception.TuesdayException;
+import tuesday.parser.Parser;
+import tuesday.storage.Storage;
+import tuesday.task.TaskList;
+import tuesday.ui.Ui;
+
 import java.io.FileNotFoundException;
 
 public class Tuesday {

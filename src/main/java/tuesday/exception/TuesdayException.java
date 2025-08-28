@@ -1,4 +1,4 @@
-import java.io.UncheckedIOException;
+package tuesday.exception;
 
 public class TuesdayException extends Exception {
     public TuesdayException(String message) {

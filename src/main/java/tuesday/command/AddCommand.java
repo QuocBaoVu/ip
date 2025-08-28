@@ -1,3 +1,8 @@
+package tuesday.command;
+import tuesday.storage.Storage;
+import tuesday.task.*;
+import tuesday.ui.Ui;
+
 import java.time.format.DateTimeParseException;
 
 public class AddCommand extends Command {

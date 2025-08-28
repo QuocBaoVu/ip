@@ -1,3 +1,10 @@
+package tuesday.command;
+
+import tuesday.storage.Storage;
+import tuesday.task.Task;
+import tuesday.task.TaskList;
+import tuesday.ui.Ui;
+
 public class DeleteCommand extends Command {
     private String index;
     public DeleteCommand(String index) {

@@ -1,3 +1,9 @@
+package tuesday.command;
+
+import tuesday.storage.Storage;
+import tuesday.task.TaskList;
+import tuesday.ui.Ui;
+
 public class EndCommand extends Command {
 
     @Override

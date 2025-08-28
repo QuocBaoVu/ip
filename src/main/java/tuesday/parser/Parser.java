@@ -1,3 +1,8 @@
+package tuesday.parser;
+
+import tuesday.exception.TuesdayException;
+import tuesday.command.*;
+
 public class Parser {
 
     public static Command parse(String input) throws TuesdayException {

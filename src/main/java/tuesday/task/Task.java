@@ -1,4 +1,4 @@
-import java.util.HashMap;
+package tuesday.task;
 
 public abstract class Task {
     private String description;
@@ -31,9 +31,9 @@ public abstract class Task {
         return isDone;
     }
 
-    abstract String getType();
+    public abstract String getType();
 
-    abstract String getTime();
+    public abstract String getTime();
 
     public String getDescription() {
         return description;

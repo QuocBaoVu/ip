@@ -1,6 +1,7 @@
+package tuesday.task;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 
 public class EventTask extends Task{
 //    private String start;

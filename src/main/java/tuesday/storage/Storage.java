@@ -1,3 +1,10 @@
+package tuesday.storage;
+
+import tuesday.task.DeadlineTask;
+import tuesday.task.EventTask;
+import tuesday.task.Task;
+import tuesday.task.TodoTask;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;

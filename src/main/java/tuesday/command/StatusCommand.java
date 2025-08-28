@@ -1,3 +1,10 @@
+package tuesday.command;
+
+import tuesday.storage.Storage;
+import tuesday.task.Task;
+import tuesday.task.TaskList;
+import tuesday.ui.Ui;
+
 public class StatusCommand extends Command {
 
     private String type;

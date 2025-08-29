@@ -1,22 +1,22 @@
 package tuesday.command;
+
+import java.time.format.DateTimeParseException;
+
 import tuesday.storage.Storage;
-import tuesday.task.*;
+import tuesday.task.TodoTask;
+import tuesday.task.EventTask;
+import tuesday.task.DeadlineTask;
+import tuesday.task.TaskList;
+import tuesday.task.Task;
 import tuesday.ui.Ui;
 
 import java.time.format.DateTimeParseException;
 
-/**
- * Represent a command to add a new task to the task list
- * Supports creation of three types of tasks:
- *  todo -> Description
- *  deadline -> Description + Deadline time
- *  event -> Description + Start time + End time
- */
 public class AddCommand extends Command {
-    private String description;
-    private String startTime;
-    private String endTime;
-    private String taskType;
+    private final String DESCRIPTION;
+    private final String START_TIME;
+    private final String END_TIME;
+    private final String TASK_TYPE;
 
     /**
      * Construct AddCommend for a todo task
@@ -24,10 +24,10 @@ public class AddCommand extends Command {
      * @param taskType
      */
     public AddCommand(String description, String taskType) {
-        this.description = description;
-        this.taskType = taskType;
-        this.startTime = "";
-        this.endTime = "";
+        this.DESCRIPTION = description;
+        this.START_TIME = taskType;
+        this.END_TIME = "";
+        this.TASK_TYPE = "";
     }
 
     /**
@@ -37,10 +37,11 @@ public class AddCommand extends Command {
      * @param startTime
      */
     public AddCommand(String description, String taskType, String startTime) {
-        this.description = description;
-        this.startTime = startTime;
-        this.taskType = taskType;
-        this.endTime = "";
+        this.DESCRIPTION = description;
+        this.START_TIME = startTime;
+        this.END_TIME = "";
+        this.TASK_TYPE = taskType;
+
     }
 
     /**
@@ -51,10 +52,10 @@ public class AddCommand extends Command {
      * @param endTime
      */
     public AddCommand(String description, String taskType, String startTime, String endTime) {
-        this.description = description;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.taskType = taskType;
+        this.DESCRIPTION = description;
+        this.START_TIME = startTime;
+        this.END_TIME = endTime;
+        this.TASK_TYPE = taskType;
     }
 
     /**
@@ -69,25 +70,27 @@ public class AddCommand extends Command {
     public void execute(TaskList tasks, Ui ui, Storage storage) {
         Task task = null;
         try {
-            switch (taskType) {
-                case "todo":
-                    task = new TodoTask(this.description);
-                    tasks.addTask(task);
-                    break;
-                case "deadline":
-                    task = new DeadlineTask(this.description, this.startTime);
-                    tasks.addTask(task);
-                    break;
-                case "event":
-                    task = new EventTask(this.description, this.startTime, this.endTime);
-                    tasks.addTask(task);
-                    break;
+            switch (TASK_TYPE) {
+            case "todo":
+                task = new TodoTask(this.DESCRIPTION);
+                tasks.addTask(task);
+                break;
+            case "deadline":
+                task = new DeadlineTask(this.DESCRIPTION, this.START_TIME);
+                tasks.addTask(task);
+                break;
+            case "event":
+                task = new EventTask(this.DESCRIPTION, this.START_TIME, this.END_TIME);
+                tasks.addTask(task);
+                break;
             }
+
             System.out.println("Got it. I've added this task:");
             System.out.println(task);
             System.out.println("Now you have " + tasks.size() + " tasks in the list");
         } catch (DateTimeParseException e) {
-            ui.showError(e.getMessage() + "Time format should be: dd-MM-yyyy HHmm");
+            ui.showError(e.getMessage() +
+                    "Time format should be: dd-MM-yyyy HHmm");
         }
 
     }

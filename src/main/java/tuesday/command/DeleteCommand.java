@@ -10,6 +10,8 @@ import tuesday.ui.Ui;
  * remove it, and display a confirmation message to the user.
  */
 public class DeleteCommand extends Command {
+    private final String INDEX;
+
     private String index;
 
     /**
@@ -17,8 +19,9 @@ public class DeleteCommand extends Command {
      * @param index
      */
     public DeleteCommand(String index) {
-        this.index = index;
+        this.INDEX = index;
     }
+
 
     /**
      * Executes the delete command by removing the task
@@ -29,17 +32,15 @@ public class DeleteCommand extends Command {
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) {
         try {
-            Task task = tasks.getTask(Integer.parseInt(index) - 1);
+            Task task = tasks.getTask(Integer.parseInt(INDEX) - 1);
             tasks.deleteTask(task);
-
             System.out.println("Noted. I've removed this task:");
             System.out.println(task.toString());
             System.out.println("Now you have " + tasks.size() + " tasks in the list");
+
         } catch (IndexOutOfBoundsException | NumberFormatException e ) {
             ui.showError(e.getMessage());
         }
-
-
     }
 
     public boolean isExit() {

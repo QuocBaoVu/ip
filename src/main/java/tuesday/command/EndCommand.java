@@ -29,7 +29,6 @@ public class EndCommand extends Command {
             ui.showError(e.getMessage());
         }
 
-
        ui.showExit();
     }
 

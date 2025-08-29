@@ -26,8 +26,12 @@ public class TodoTask extends Task {
      */
     public String getTime() {
         return "";
-    };
-    @Override public String toString(){
-        return String.format("[T][%s] %s", this.isDone() ? "X" : " " ,this.getDescription());
+    }
+
+    @Override
+    public String toString() {
+        return String.format("[T][%s] %s",
+                this.isDone() ? "X" : " " ,
+                this.getDescription());
     }
 }

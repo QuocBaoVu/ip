@@ -1,5 +1,8 @@
 package tuesday;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+
 import tuesday.command.Command;
 import tuesday.exception.TuesdayException;
 import tuesday.parser.Parser;
@@ -7,8 +10,6 @@ import tuesday.storage.Storage;
 import tuesday.task.TaskList;
 import tuesday.ui.Ui;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 
 public class Tuesday {
 
@@ -27,19 +28,16 @@ public class Tuesday {
         }
     }
 
-
     public static void main(String[] args) {
         // Load data from data/tuesday.txt to list
         String projectPath = System.getProperty("user.dir");
         String filePath = projectPath + "/data/tuesday.txt";
 
         File file = new File(filePath);
-
         File parent = file.getParentFile();
         if (!parent.exists() && !parent.mkdirs()) {
             System.out.println("Failed to create directory: " + parent.getAbsolutePath());
         }
-
 
         new Tuesday(filePath).run();
     }

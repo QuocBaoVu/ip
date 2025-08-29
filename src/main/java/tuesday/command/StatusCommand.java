@@ -7,18 +7,18 @@ import tuesday.ui.Ui;
 
 public class StatusCommand extends Command {
 
-    private String type;
-    private String index;
+    private final String TYPE;
+    private final String INDEX;
 
     public StatusCommand(String type, String index) {
-        this.type = type;
-        this.index = index;
+        this.TYPE = type;
+        this.INDEX = index;
     }
 
     public void execute(TaskList tasks, Ui ui, Storage storage) {
         try {
-            Task task = tasks.getTask(Integer.parseInt(index) - 1);
-            switch (type) {
+            Task task = tasks.getTask(Integer.parseInt(INDEX) - 1);
+            switch (TYPE) {
                 case "mark":
                     task.markDone();
                     break;
@@ -26,6 +26,7 @@ public class StatusCommand extends Command {
                     task.unmarkDone();
                     break;
             }
+
             ListCommand ls = new ListCommand();
             ls.execute(tasks, ui, storage);
         } catch (IndexOutOfBoundsException | NumberFormatException e) {

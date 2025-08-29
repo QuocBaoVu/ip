@@ -13,8 +13,7 @@ public abstract class Task {
     public String toString() {
         if (this.isDone) {
             return String.format("[X] %s.", description);
-        }
-        else {
+        } else {
             return String.format("[ ] %s.", description);
         }
     }

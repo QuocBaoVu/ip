@@ -5,7 +5,6 @@ import tuesday.task.TaskList;
 import tuesday.ui.Ui;
 
 public class EndCommand extends Command {
-
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) {
         ui.showDataSaving();
@@ -15,7 +14,6 @@ public class EndCommand extends Command {
         } catch (Exception e) {
             ui.showError(e.getMessage());
         }
-
 
        ui.showExit();
     }

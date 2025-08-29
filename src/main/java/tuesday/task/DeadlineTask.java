@@ -5,11 +5,15 @@ import java.time.format.DateTimeFormatter;
 
 public class DeadlineTask extends Task {
     private LocalDateTime deadlineTime;
-    private final DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy - h:mma");
-    private final DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HHmm");
+
+    private final DateTimeFormatter OUTPUT_FORMATTER =
+            DateTimeFormatter.ofPattern("dd MMM yyyy - h:mma");
+    private final DateTimeFormatter INPUT_FORMATTER =
+            DateTimeFormatter.ofPattern("dd-MM-yyyy HHmm");
+
     public DeadlineTask(String description, String deadline) {
         super(description);
-        this.deadlineTime = LocalDateTime.parse(deadline, inputFormatter);
+        this.deadlineTime = LocalDateTime.parse(deadline, OUTPUT_FORMATTER);
     }
 
     // Return type of the Task
@@ -19,18 +23,21 @@ public class DeadlineTask extends Task {
 
     // Return the deadline time of Task in String form
     public String getTime() {
-        return this.deadlineTime.format(inputFormatter);
+        return this.deadlineTime.format(INPUT_FORMATTER);
     }
 
     // Return the deadline time of Task in LocalDateTime form
     public String getDeadlineTime() {
-        return this.deadlineTime.format(outputFormatter);
+        return this.deadlineTime.format(OUTPUT_FORMATTER);
     }
 
 
     @Override
     public String toString() {
-        return String.format("[D][%s] %s (BY %s)", this.isDone() ? "X" : " ", this.getDescription(),  this.getDeadlineTime());
+        return String.format("[D][%s] %s (BY %s)",
+                this.isDone() ? "X" : " ",
+                this.getDescription(),
+                this.getDeadlineTime());
 
     }
 }

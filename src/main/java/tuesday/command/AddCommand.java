@@ -5,13 +5,24 @@ import tuesday.ui.Ui;
 
 import java.time.format.DateTimeParseException;
 
+/**
+ * Represent a command to add a new task to the task list
+ * Supports creation of three types of tasks:
+ *  todo -> Description
+ *  deadline -> Description + Deadline time
+ *  event -> Description + Start time + End time
+ */
 public class AddCommand extends Command {
     private String description;
     private String startTime;
     private String endTime;
     private String taskType;
 
-    // Constructor for todo
+    /**
+     * Construct AddCommend for a todo task
+     * @param description
+     * @param taskType
+     */
     public AddCommand(String description, String taskType) {
         this.description = description;
         this.taskType = taskType;
@@ -19,7 +30,12 @@ public class AddCommand extends Command {
         this.endTime = "";
     }
 
-    // Constructor for Deadline
+    /**
+     * Construct AddCommend for deadline Task
+     * @param description
+     * @param taskType
+     * @param startTime
+     */
     public AddCommand(String description, String taskType, String startTime) {
         this.description = description;
         this.startTime = startTime;
@@ -27,7 +43,13 @@ public class AddCommand extends Command {
         this.endTime = "";
     }
 
-    // Constructor for Event
+    /**
+     * Construct AddCommend for event task
+     * @param description
+     * @param taskType
+     * @param startTime
+     * @param endTime
+     */
     public AddCommand(String description, String taskType, String startTime, String endTime) {
         this.description = description;
         this.startTime = startTime;
@@ -35,6 +57,14 @@ public class AddCommand extends Command {
         this.taskType = taskType;
     }
 
+    /**
+     * Execute the add command by creating the correct type of task
+     * Add it to the task list
+     * Display a confirmation message to the user and the updated number of task
+     * @param tasks Task list where new task is added
+     * @param ui User interface for displaying message
+     * @param storage Storage used to store task to hardware
+     */
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) {
         Task task = null;
@@ -61,6 +91,11 @@ public class AddCommand extends Command {
         }
 
     }
+
+    /**
+     * Indicate whether this command should exit
+     * @return Always false
+     */
     public boolean isExit() {
         return false;
     }

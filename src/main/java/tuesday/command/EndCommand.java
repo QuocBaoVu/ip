@@ -4,8 +4,21 @@ import tuesday.storage.Storage;
 import tuesday.task.TaskList;
 import tuesday.ui.Ui;
 
-public class EndCommand extends Command {
 
+/**
+ * Represent a command to terminate the program
+ * Save all tasks to storage before exiting and
+ * shows exit messages to the user
+ */
+public class EndCommand extends Command {
+    /**
+     *  Execute the exit command by saving the current tasks to storage
+     *  and displaying exit messages to the user
+     *  If saving fails, an error message is shown
+     * @param tasks
+     * @param ui
+     * @param storage
+     */
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) {
         ui.showDataSaving();
@@ -20,6 +33,10 @@ public class EndCommand extends Command {
        ui.showExit();
     }
 
+    /**
+     * Indicate whether this command should exit the program.
+     * @return
+     */
     @Override
     public boolean isExit() {
         return true;

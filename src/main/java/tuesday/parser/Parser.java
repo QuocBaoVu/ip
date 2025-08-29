@@ -2,9 +2,19 @@ package tuesday.parser;
 
 import tuesday.exception.TuesdayException;
 import tuesday.command.*;
-
+/**
+ * Parses raw user input into specific Command objects
+ * that can be executed by the application.
+ * The parser identifies the command keyword
+ * and constructs the corresponding command with its parameters.
+ */
 public class Parser {
-
+    /**
+     * Parses a user input string and returns a corresponding command object.
+     * @param input
+     * @return Command representing the parsed input
+     * @throws TuesdayException If the input cannot be parsed into a valid command
+     */
     public static Command parse(String input) throws TuesdayException {
         String[] words = input.split(" ", 2);
         String commandWord = words[0];

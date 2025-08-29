@@ -10,12 +10,22 @@ import tuesday.ui.Ui;
 import java.io.File;
 import java.io.FileNotFoundException;
 
+/**
+ * Main entry point for Tuesday chatbot
+ * Initializes UI, storage, and task list, and runs the program loop.
+ */
+
 public class Tuesday {
 
     private Storage storage;
     private TaskList tasks;
     private Ui ui;
 
+    /**
+     * Construct a Tuesday application using the given filepath
+     * Load the tasks from the filepath storage file available
+     * @param filePath
+     */
     public Tuesday(String filePath) {
         ui = new Ui();
         storage = new Storage(filePath);
@@ -27,7 +37,11 @@ public class Tuesday {
         }
     }
 
-
+    /**
+     * Entry point of application
+     * Create the required data directory if required
+     * @param args
+     */
     public static void main(String[] args) {
         // Load data from data/tuesday.txt to list
         String projectPath = System.getProperty("user.dir");
@@ -44,6 +58,10 @@ public class Tuesday {
         new Tuesday(filePath).run();
     }
 
+    /**
+     * Run the chatbot with welcome message
+     * Parse user command until exit command
+     */
     public void run() {
         ui.showWelcomeMessage();
         boolean isExit = false;

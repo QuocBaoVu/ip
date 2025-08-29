@@ -36,6 +36,6 @@ public class EventTask extends Task{
 
     @Override
     public String toString() {
-            return String.format("[E][%s] %s (FROM %s TO %s)", this.isDone() ? "X" : "", this.getDescription(), this.getStartTime(), this.getEndTime());
+            return String.format("[E][%s] %s (FROM %s TO %s)", this.isDone() ? "X" : " ", this.getDescription(), this.getStartTime(), this.getEndTime());
     }
 }

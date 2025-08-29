@@ -59,6 +59,13 @@ public class Parser {
                     throw new TuesdayException("Wrong time format for event task. Time format should be: /from dd-MM-yyyy HHmm /to dd-MM-yyyy HHmm");
                 }
                 return new AddCommand(eventSplitContent[0].trim(), "event", eventSplitContent[1].trim(), eventSplitContent[2].trim());
+            case "find":
+                if (input.trim().equals("find")) {
+                    throw new TuesdayException("Missing find input");
+                }
+
+                String findContent = input.substring(5);
+                return new FindCommand(findContent);
             default:
                 throw new TuesdayException("Invalid command!");
         }

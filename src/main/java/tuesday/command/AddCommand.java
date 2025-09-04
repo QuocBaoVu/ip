@@ -96,6 +96,50 @@ public class AddCommand extends Command {
     }
 
     /**
+     * Execute the add response
+     * @param tasks
+     * @param ui
+     * @param storage
+     * @return
+     */
+    @Override
+    public String getResponse(TaskList tasks, Ui ui, Storage storage) {
+        Task task = null;
+        String response = "";
+        try {
+            switch (TASK_TYPE) {
+                case "todo":
+                    task = new TodoTask(this.DESCRIPTION);
+                    tasks.addTask(task);
+                    break;
+                case "deadline":
+                    task = new DeadlineTask(this.DESCRIPTION, this.START_TIME);
+                    tasks.addTask(task);
+                    break;
+                case "event":
+                    task = new EventTask(this.DESCRIPTION, this.START_TIME, this.END_TIME);
+                    tasks.addTask(task);
+                    break;
+            }
+            if (task == null) {
+                throw new NullPointerException("task is null");
+            }
+            response = "Got it. I've added this task:\n" + task.toString() +
+                    "\n" + "Now you have " + tasks.size() + " tasks in the list";
+            System.out.println(response);
+        } catch (DateTimeParseException e) {
+            response = e.getMessage() +
+                    "Time format should be: dd-MM-yyyy HHmm";
+            ui.showError(response);
+        } catch (NullPointerException e) {
+            response = e.getMessage();
+            ui.showError(response);
+        }
+        return response;
+
+    }
+
+    /**
      * Indicate whether this command should exit
      * @return Always false
      */

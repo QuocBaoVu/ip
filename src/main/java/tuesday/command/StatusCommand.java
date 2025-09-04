@@ -30,6 +30,7 @@ public class StatusCommand extends Command {
      * @param ui
      * @param storage
      */
+    @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) {
         try {
             Task task = tasks.getTask(Integer.parseInt(INDEX) - 1);
@@ -47,6 +48,30 @@ public class StatusCommand extends Command {
         } catch (IndexOutOfBoundsException | NumberFormatException e) {
             ui.showError(e.getMessage());
         }
+    }
+
+    @Override
+    public String getResponse(TaskList tasks, Ui ui, Storage storage) {
+        String response;
+        try {
+            Task task = tasks.getTask(Integer.parseInt(INDEX) - 1);
+            switch (TYPE) {
+                case "mark":
+                    task.markDone();
+                    break;
+                case "unmark":
+                    task.unmarkDone();
+                    break;
+            }
+
+            ListCommand ls = new ListCommand();
+            response = ls.getResponse(tasks, ui, storage);
+            ls.execute(tasks, ui, storage);
+        } catch (IndexOutOfBoundsException | NumberFormatException e) {
+            response = e.getMessage();
+            ui.showError(e.getMessage());
+        }
+        return response;
     }
     /**
      * Indicate whether this command should exit

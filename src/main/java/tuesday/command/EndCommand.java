@@ -33,6 +33,27 @@ public class EndCommand extends Command {
     }
 
     /**
+     * Return the response for End command
+     * @param tasks
+     * @param ui
+     * @param storage
+     * @return
+     */
+    @Override
+    public String getResponse(TaskList tasks, Ui ui, Storage storage) {
+        try {
+            storage.saveData(tasks.getTasks());
+            ui.showDataSaved();
+        } catch (Exception e) {
+            ui.showError(e.getMessage());
+            return e.getMessage();
+
+        }
+        ui.showExit();
+        return "";
+    }
+
+    /**
      * Indicate whether this command should exit the program.
      * @return
      */

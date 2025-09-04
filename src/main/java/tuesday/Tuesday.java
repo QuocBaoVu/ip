@@ -84,4 +84,16 @@ public class Tuesday {
             }
         }
     }
+
+    public String getResponse(String input) {
+        try {
+            Command c = Parser.parse(input);
+            String res = c.getResponse(tasks, ui, storage);
+            return res;
+        } catch (TuesdayException e) {
+            ui.showError(e.getMessage());
+            return e.getMessage();
+        }
+    }
+
 }

@@ -43,6 +43,29 @@ public class DeleteCommand extends Command {
         }
     }
 
+    /**
+     *
+     * @param tasks
+     * @param ui
+     * @param storage
+     * @return
+     */
+    @Override
+    public String getResponse(TaskList tasks, Ui ui, Storage storage) {
+        Task task = null;
+        String response = "";
+        try {
+            task = tasks.getTask(Integer.parseInt(INDEX) - 1);
+            tasks.deleteTask(task);
+            response = "Noted. I've removed this task:\n" + task.toString() + "\n" + "Now you have " + tasks.size() + " tasks in the list";
+            System.out.println(response);
+        } catch (IndexOutOfBoundsException | NumberFormatException e ) {
+            ui.showError(e.getMessage());
+            response = e.getMessage();
+        }
+        return response;
+    }
+
     public boolean isExit() {
         return false;
     }

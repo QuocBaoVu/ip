@@ -27,6 +27,29 @@ public class ListCommand extends Command {
             }
         }
     }
+
+    /**
+     * Return the response for the List command
+     * @param tasks
+     * @param ui
+     * @param storage
+     * @return
+     */
+    @Override
+    public String getResponse(TaskList tasks, Ui ui, Storage storage) {
+        String response = "";
+        if (tasks.getTasks().isEmpty()) {
+            response = "No tasks found";
+            System.out.println(response);
+        } else {
+            System.out.println("Here are the tasks in your list:");
+            for (int i = 0; i < tasks.size(); i++) {
+                response += (i + 1) + "." + tasks.getTask(i).toString() + "\n";
+                System.out.println((i + 1) + "." + tasks.getTask(i).toString());
+            }
+        }
+        return response;
+    }
     /**
      * Indicate whether this command should exit
      * @return Always false

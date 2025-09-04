@@ -15,6 +15,12 @@ public class FindCommand extends Command{
         this.INPUT = input;
     }
 
+    /**
+     * Execute the "Find" Command
+     * @param tasks
+     * @param ui
+     * @param storage
+     */
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) {
         List<Task> matchingList = new ArrayList<>();
@@ -33,8 +39,35 @@ public class FindCommand extends Command{
                 System.out.println(task);
             }
         }
+    }
 
-
+    /**
+     * Return response for Find command
+     * @param tasks
+     * @param ui
+     * @param storage
+     * @return
+     */
+    @Override
+    public String getResponse(TaskList tasks, Ui ui, Storage storage) {
+        List<Task> matchingList = new ArrayList<>();
+        String response = "";
+        for (Task task : tasks.getTasks()) {
+            if (task.getDescription().contains(INPUT)) {
+                matchingList.add(task);
+            }
+        }
+        if (matchingList.isEmpty()) {
+            response = "No matching tasks found.";
+            System.out.println(response);
+        } else {
+            System.out.println("Here are the matching tasks in your list:");
+            for (Task task : matchingList) {
+                response = task.getDescription();
+                System.out.println(task);
+            }
+        }
+        return response;
     }
 
     @Override

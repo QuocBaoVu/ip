@@ -25,9 +25,9 @@ public class AddCommand extends Command {
      */
     public AddCommand(String description, String taskType) {
         this.DESCRIPTION = description;
-        this.START_TIME = taskType;
+        this.TASK_TYPE = taskType;
         this.END_TIME = "";
-        this.TASK_TYPE = "";
+        this.START_TIME = "";
     }
 
     /**
@@ -128,11 +128,11 @@ public class AddCommand extends Command {
                     "\n" + "Now you have " + tasks.size() + " tasks in the list";
             System.out.println(response);
         } catch (DateTimeParseException e) {
-            response = e.getMessage() +
-                    "Time format should be: dd-MM-yyyy HHmm";
+            response = "Error: " + e.getMessage() +
+                    " Time format should be: dd-MM-yyyy HHmm";
             ui.showError(response);
         } catch (NullPointerException e) {
-            response = e.getMessage();
+            response = "Error: " + e.getMessage();
             ui.showError(response);
         }
         return response;

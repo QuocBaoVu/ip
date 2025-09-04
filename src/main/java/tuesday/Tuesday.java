@@ -23,6 +23,7 @@ public class Tuesday {
     private Storage storage;
     private TaskList tasks;
     private Ui ui;
+    private boolean isExit;
 
     /**
      * Construct a Tuesday application using the given filepath
@@ -32,6 +33,7 @@ public class Tuesday {
     public Tuesday(String filePath) {
         ui = new Ui();
         storage = new Storage(filePath);
+        isExit = false;
         try {
             tasks = new TaskList(storage.loadData());
         } catch (FileNotFoundException e) {
@@ -66,17 +68,18 @@ public class Tuesday {
     /**
      * Run the chatbot with welcome message
      * Parse user command until exit command
+     * Print on terminal only
      */
     public void run() {
         ui.showWelcomeMessage();
-        boolean isExit = false;
-        while (!isExit) {
+        while (!this.isExit) {
             try {
                 String fullCommand = ui.readCommand();
                 ui.showLine();
                 Command c = Parser.parse(fullCommand);
                 c.execute(tasks, ui, storage);
-                isExit = c.isExit();
+                this.isExit = c.isExit();
+                System.out.println(this.isExit);
             } catch (TuesdayException e) {
                 ui.showError(e.getMessage());
             } finally {
@@ -85,15 +88,29 @@ public class Tuesday {
         }
     }
 
+    /**
+     * Return the response as a String
+     * @param input
+     * @return String as response
+     */
     public String getResponse(String input) {
         try {
             Command c = Parser.parse(input);
-            String res = c.getResponse(tasks, ui, storage);
-            return res;
+            String response = c.getResponse(tasks, ui, storage);
+            this.isExit = c.isExit();
+            return response;
         } catch (TuesdayException e) {
             ui.showError(e.getMessage());
             return e.getMessage();
         }
+    }
+
+    /**
+     *
+     * @return isExit
+     */
+    public boolean isExit() {
+        return isExit;
     }
 
 }

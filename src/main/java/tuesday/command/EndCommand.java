@@ -46,7 +46,7 @@ public class EndCommand extends Command {
             ui.showDataSaved();
         } catch (Exception e) {
             ui.showError(e.getMessage());
-            return e.getMessage();
+            return "Error: " + e.getMessage();
 
         }
         ui.showExit();

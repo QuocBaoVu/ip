@@ -68,7 +68,7 @@ public class StatusCommand extends Command {
             response = ls.getResponse(tasks, ui, storage);
             ls.execute(tasks, ui, storage);
         } catch (IndexOutOfBoundsException | NumberFormatException e) {
-            response = e.getMessage();
+            response = "Error: " + e.getMessage();
             ui.showError(e.getMessage());
         }
         return response;

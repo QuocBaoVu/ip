@@ -128,11 +128,11 @@ public class AddCommand extends Command {
                     "\n" + "Now you have " + tasks.size() + " tasks in the list";
             System.out.println(response);
         } catch (DateTimeParseException e) {
-            response = e.getMessage() +
+            response = "Error: " + e.getMessage() +
                     "Time format should be: dd-MM-yyyy HHmm";
             ui.showError(response);
         } catch (NullPointerException e) {
-            response = e.getMessage();
+            response = "Error: " + e.getMessage();
             ui.showError(response);
         }
         return response;

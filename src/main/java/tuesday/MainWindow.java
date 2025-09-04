@@ -48,7 +48,7 @@ public class MainWindow extends AnchorPane {
         String response = tuesday.getResponse(input);
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input, userImage),
-                DialogBox.getDukeDialog(response, dukeImage)
+                DialogBox.getTuesdayDialog(response, dukeImage)
         );
         userInput.clear();
         System.out.println(tuesday.isExit());

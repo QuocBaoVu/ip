@@ -61,7 +61,7 @@ public class DeleteCommand extends Command {
             System.out.println(response);
         } catch (IndexOutOfBoundsException | NumberFormatException e ) {
             ui.showError(e.getMessage());
-            response = e.getMessage();
+            response = "Error: " + e.getMessage();
         }
         return response;
     }

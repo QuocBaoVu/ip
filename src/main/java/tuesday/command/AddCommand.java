@@ -25,9 +25,9 @@ public class AddCommand extends Command {
      */
     public AddCommand(String description, String taskType) {
         this.DESCRIPTION = description;
-        this.START_TIME = taskType;
+        this.TASK_TYPE = taskType;
         this.END_TIME = "";
-        this.TASK_TYPE = "";
+        this.START_TIME = "";
     }
 
     /**

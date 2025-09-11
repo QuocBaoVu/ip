@@ -25,11 +25,13 @@ public class AddCommand extends Command {
 
 
     /**
-     * Construct AddCommend for a todo task
+     * Construct AddCommend for a To-do task
      * @param description
      * @param taskType
      */
     public AddCommand(String description, TaskType taskType) {
+        assert description != null && !description.isEmpty() : "Description cannot be null or empty";
+        assert taskType == TaskType.TODO : "This constructor should only be used for todo tasks";
         this.DESCRIPTION = description;
         this.TASK_TYPE = taskType;
         this.END_TIME = "";
@@ -43,6 +45,9 @@ public class AddCommand extends Command {
      * @param startTime
      */
     public AddCommand(String description, TaskType taskType, String startTime) {
+        assert description != null && !description.isEmpty() : "Description cannot be null or empty";
+        assert taskType == TaskType.DEADLINE: "This constructor should only be used for deadline tasks";
+        assert startTime != null && !startTime.isEmpty() : "Deadline must have a start time";
         this.DESCRIPTION = description;
         this.START_TIME = startTime;
         this.END_TIME = "";
@@ -58,6 +63,10 @@ public class AddCommand extends Command {
      * @param endTime
      */
     public AddCommand(String description, TaskType taskType, String startTime, String endTime) {
+        assert description != null && !description.isEmpty() : "Description cannot be null or empty";
+        assert taskType == TaskType.EVENT : "This constructor should only be used for event tasks";
+        assert startTime != null && !startTime.isEmpty() : "Event must have a start time";
+        assert endTime != null && !endTime.isEmpty() : "Event must have an end time";
         this.DESCRIPTION = description;
         this.START_TIME = startTime;
         this.END_TIME = endTime;
@@ -73,15 +82,15 @@ public class AddCommand extends Command {
     private Task classifyTask(TaskList tasks, TaskType taskType) {
         Task task = null;
         switch (taskType) {
-            case TODO:
-                task = new TodoTask(this.DESCRIPTION);
-                break;
-            case DEADLINE:
-                task = new DeadlineTask(this.DESCRIPTION, this.START_TIME);
-                break;
-            case EVENT:
-                task = new EventTask(this.DESCRIPTION, this.START_TIME, this.END_TIME);
-                break;
+        case TODO:
+            task = new TodoTask(this.DESCRIPTION);
+            break;
+        case DEADLINE:
+            task = new DeadlineTask(this.DESCRIPTION, this.START_TIME);
+            break;
+        case EVENT:
+            task = new EventTask(this.DESCRIPTION, this.START_TIME, this.END_TIME);
+            break;
         }
         tasks.addTask(task);
         return task;
@@ -114,8 +123,7 @@ public class AddCommand extends Command {
             Task task = classifyTask(tasks, TASK_TYPE);
             printSuccessMessage(task, tasks);
         } catch (DateTimeParseException e) {
-            ui.showError(e.getMessage() +
-                    TIME_FORMAT);
+            ui.showError(e.getMessage() + TIME_FORMAT);
         }
 
     }
@@ -139,7 +147,6 @@ public class AddCommand extends Command {
         }
 
         return response;
-
     }
 
     /**

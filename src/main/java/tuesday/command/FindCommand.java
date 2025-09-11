@@ -76,8 +76,7 @@ public class FindCommand extends Command{
      */
     @Override
     public String getResponse(TaskList tasks, Ui ui, Storage storage) {
-        String response = formatMatches(findMatching(tasks, KEYWORD));
-        return response;
+        return formatMatches(findMatching(tasks, KEYWORD));
     }
 
     @Override

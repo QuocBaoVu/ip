@@ -4,6 +4,7 @@ import tuesday.storage.Storage;
 import tuesday.task.Task;
 import tuesday.task.TaskList;
 import tuesday.ui.Ui;
+import tuesday.command.CommandEnums.StatusAction;
 
 /**
  * Represent a command to update the completion status of a task
@@ -11,65 +12,67 @@ import tuesday.ui.Ui;
  */
 public class StatusCommand extends Command {
 
-    private final String TYPE;
-    private final String INDEX;
+    private final int TASK_INDEX;
+    private final StatusAction ACTION;
+    private static final String ERROR_MESSAGE = "ERROR: ";
 
     /**
      * Construct a StatusCommand with the specified operation type and index
-     * @param type: 'mark' or 'unmark'
+     * @param type: MARK or UNMARK
      * @param index: index of the task that we want to alter
      */
-    public StatusCommand(String type, String index) {
-        this.TYPE = type;
-        this.INDEX = index;
+    public StatusCommand(StatusAction type, String index) {
+        this.ACTION = type;
+        this.TASK_INDEX = Integer.parseInt(index) - 1;
     }
 
     /**
+     * Toggle the status of a Task
+     * @param task: Specified Task
+     * @param action: MARK or UNMARK
+     */
+    private void toggleStatus(Task task, StatusAction action) {
+        switch (action) {
+        case MARK:
+            task.markDone();
+            break;
+        case UNMARK:
+            task.unmarkDone();
+            break;
+        default:
+            throw new IllegalArgumentException(ERROR_MESSAGE + ACTION);
+        }
+    }
+    /**
      * Execute the status command by marking or unmarking the specified task
-     * @param tasks
-     * @param ui
-     * @param storage
+     * @param tasks: List of Tasks
+     * @param ui: UI
+     * @param storage: Storage
      */
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) {
         try {
-            Task task = tasks.getTask(Integer.parseInt(INDEX) - 1);
-            switch (TYPE) {
-                case "mark":
-                    task.markDone();
-                    break;
-                case "unmark":
-                    task.unmarkDone();
-                    break;
-            }
-
-            ListCommand ls = new ListCommand();
-            ls.execute(tasks, ui, storage);
+            Task task = tasks.getTask(TASK_INDEX);
+            toggleStatus(task, ACTION);
+            ListCommand listCommand = new ListCommand();
+            listCommand.execute(tasks, ui, storage);
         } catch (IndexOutOfBoundsException | NumberFormatException e) {
-            ui.showError(e.getMessage());
+            ui.showError(ERROR_MESSAGE + e.getMessage());
         }
     }
 
     @Override
     public String getResponse(TaskList tasks, Ui ui, Storage storage) {
-        String response = "";
+        String response;
         try {
-            int task_id = Integer.parseInt(INDEX) - 1;
-            Task task = tasks.getTask(task_id);
-            switch (TYPE) {
-                case "mark":
-                    task.markDone();
-                    break;
-                case "unmark":
-                    task.unmarkDone();
-                    break;
-            }
+            Task task = tasks.getTask(TASK_INDEX);
+            toggleStatus(task, ACTION);
 
-            ListCommand ls = new ListCommand();
-            response = ls.getResponse(tasks, ui, storage);
-            ls.execute(tasks, ui, storage);
+            ListCommand listCommand = new ListCommand();
+            response = listCommand.getResponse(tasks, ui, storage);
+            listCommand.execute(tasks, ui, storage);
         } catch (IndexOutOfBoundsException | NumberFormatException e) {
-            response = "Error: " + e.getMessage();
+            response = ERROR_MESSAGE + e.getMessage();
             ui.showError(e.getMessage());
         }
         assert response != null: "No response";

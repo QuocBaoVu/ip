@@ -24,6 +24,12 @@ public class DeleteCommand extends Command {
         this.INDEX = Integer.parseInt(index) - 1;
     }
 
+    /**
+     * Print the message when successfully delete a task
+     * @param task: deleting task
+     * @param tasks: TaskList
+     * @return String of response that would be print
+     */
     private String printSuccessMessage(Task task, TaskList tasks) {
         String response = SUCCESS_MESSAGE + task.toString() + "\n"
                 + "Now you have " + tasks.size() + " tasks in the list";
@@ -31,6 +37,12 @@ public class DeleteCommand extends Command {
         return response;
     }
 
+    /**
+     * Delete the specify task from TaskList
+     * @param tasks: List of tasks
+     * @param index: The index of the task needed to be delete
+     * @return
+     */
     private Task deleteTaskAtIndex(TaskList tasks, Integer index) {
         Task task = tasks.getTask(index);
         tasks.deleteTask(task);

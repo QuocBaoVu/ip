@@ -73,6 +73,12 @@ public class AddCommand extends Command {
         this.TASK_TYPE = taskType;
     }
 
+    /**
+     * Create task based on their TaskType
+     * @param tasks: TaskList
+     * @param taskType: Type of Task
+     * @return the created Task
+     */
     private Task classifyTask(TaskList tasks, TaskType taskType) {
         Task task = null;
         switch (taskType) {
@@ -91,6 +97,12 @@ public class AddCommand extends Command {
         return task;
     }
 
+    /**
+     * Print the message when created a task successfully
+     * @param task: created task
+     * @param tasks: list of tasks
+     * @return String of message
+     */
     private String printSuccessMessage(Task task, TaskList tasks) {
         String response = SUCCESS_MESSAGE + task.toString() +
                 "\n" + "Now you have " + tasks.size() + " tasks in the list";

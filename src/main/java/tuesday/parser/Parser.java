@@ -13,9 +13,14 @@ import tuesday.task.TaskEnums.TaskType;
 
 
 public class Parser {
+
+    private static final String TODO_FORMAT = "Use format: todo <desc>";
+    private static final String DEADLINE_FORMAT = "Use format: deadline <desc> /by dd-MM-yyyy HHmm";
+    private static final String EVENT_FORMAT = "Use format: event <desc> /from dd-MM-yyyy HHmm /to dd-MM-yyyy HHmm";
+    private static final String MISSING_INDEX = "Missing task index!";
     /**
-     * Parses a user input string and returns a corresponding command object.
-     * @param input
+     * Parse a user input string and returns a corresponding command object.
+     * @param input: Input from user
      * @return Command representing the parsed input
      * @throws TuesdayException If the input cannot be parsed into a valid command
      */
@@ -55,42 +60,66 @@ public class Parser {
 
         default:
             throw new TuesdayException("Invalid command!");
-    }
+        }
     }
 
+    /**
+     * Parse a Status command
+     * @param words: List of words from input
+     * @param action: MARK or UNMARK
+     * @return: Return StatusCommand
+     * @throws TuesdayException
+     */
     private static Command parseStatus(String[] words, String action) throws TuesdayException {
         if (words.length < 2) {
-            throw new TuesdayException("Missing task index!");
+            throw new TuesdayException(MISSING_INDEX);
         }
         StatusAction status = action.equals("mark") ? StatusAction.MARK : StatusAction.UNMARK;
         return new StatusCommand(status, words[1]);
     }
 
+    /**
+     * Parse a AddCommand for To-do Task
+     * @param words: Input list of words
+     * @return: AddCommand with To-do constructors
+     * @throws TuesdayException
+     */
     private static Command parseTodo(String[] words) throws TuesdayException {
         if (words.length < 2 || words[1].trim().isEmpty()) {
-            throw new TuesdayException("Missing To-do task description!");
+            throw new TuesdayException(TODO_FORMAT);
         }
         return new AddCommand(words[1].trim(), TaskType.TODO);
     }
 
+    /**
+     * Parse a command to add a Deadline Task
+     * @param input: The untouch input from user
+     * @return AddCommend with Deadline constructor
+     * @throws TuesdayException
+     */
     private static Command parseDeadline(String input) throws TuesdayException {
         if (!input.contains("/by")) {
-            throw new TuesdayException("Missing deadline time. Use format: /by dd-MM-yyyy HHmm");
+            throw new TuesdayException("Missing deadline time. " + DEADLINE_FORMAT);
         }
+            String deadlineContent = input.substring(9); // remove "deadline "
+            String[] parts = deadlineContent.split(" /by ", 2);
 
-        String deadlineContent = input.substring(9); // remove "deadline "
-        String[] parts = deadlineContent.split(" /by ", 2);
+            if (parts.length != 2) {
+                throw new TuesdayException("Invalid deadline format. " + DEADLINE_FORMAT);
+            }
 
-        if (parts.length != 2) {
-            throw new TuesdayException("Invalid deadline format. Use: deadline <desc> /by dd-MM-yyyy HHmm");
-        }
-
-        return new AddCommand(parts[0].trim(), TaskType.DEADLINE, parts[1].trim());
+            return new AddCommand(parts[0].trim(), TaskType.DEADLINE, parts[1].trim());
     }
 
+    /**
+     * Parse a command to add a Event task
+     * @param input: The untouched input from user
+     * @return AddCommend with Event constructor
+     * @throws TuesdayException
+     */
     private static Command parseEvent(String input) throws TuesdayException {
         if (!input.contains("/from") || !input.contains("/to")) {
-            throw new TuesdayException("Invalid event format. Use: event <desc> /from dd-MM-yyyy HHmm /to dd-MM-yyyy HHmm");
+            throw new TuesdayException("Invalid event format. " + EVENT_FORMAT);
         }
 
         String eventContent = input.substring(6); // remove "event "
@@ -98,12 +127,18 @@ public class Parser {
         String[] parts = eventContent.split(regex, 3);
 
         if (parts.length != 3) {
-            throw new TuesdayException("Invalid event format. Use: event <desc> /from dd-MM-yyyy HHmm /to dd-MM-yyyy HHmm");
+            throw new TuesdayException("Invalid event format. " + EVENT_FORMAT);
         }
 
         return new AddCommand(parts[0].trim(), TaskType.EVENT, parts[1].trim(), parts[2].trim());
     }
 
+    /**
+     * Parse Find command
+     * @param input: untouched input from user
+     * @return FindCommand
+     * @throws TuesdayException
+     */
     private static Command parseFind(String input) throws TuesdayException {
         if (input.trim().equals("find")) {
             throw new TuesdayException("Missing find keyword!");
@@ -115,9 +150,15 @@ public class Parser {
         return new FindCommand(keyword);
     }
 
+    /**
+     * Parse Delete command
+     * @param words: list of words from users
+     * @return DeleteCommand
+     * @throws TuesdayException
+     */
     private static Command parseDelete(String[] words) throws TuesdayException {
         if (words.length < 2) {
-            throw new TuesdayException("Missing task index!");
+            throw new TuesdayException(MISSING_INDEX);
         }
         return new DeleteCommand(words[1].trim());
     }

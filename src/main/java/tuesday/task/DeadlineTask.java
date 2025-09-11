@@ -6,12 +6,14 @@ import java.time.format.DateTimeFormatter;
  *  Implementation of DeadlineTask Class
  */
 public class DeadlineTask extends Task {
+    private final String OUTPUT_FORMAT_PATTERN = "dd MMM yyyy - h:mma" ;
+    private final String INPUT_FORMAT_PATTERN = "dd-MM-yyyy HHmm";
     private LocalDateTime deadlineTime;
 
     private final DateTimeFormatter OUTPUT_FORMATTER =
-            DateTimeFormatter.ofPattern("dd MMM yyyy - h:mma");
+            DateTimeFormatter.ofPattern(OUTPUT_FORMAT_PATTERN);
     private final DateTimeFormatter INPUT_FORMATTER =
-            DateTimeFormatter.ofPattern("dd-MM-yyyy HHmm");
+            DateTimeFormatter.ofPattern(INPUT_FORMAT_PATTERN);
 
 
     /**

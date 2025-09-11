@@ -13,10 +13,20 @@ public class FindCommand extends Command{
     private static final String NO_TASK_FOUND = "No matching tasks found";
     private static final String TASKS_FOUND = "Here are the matching tasks in your list:";
 
+    /**
+     * Constructor for Find Command
+     * @param input: Raw input from Parser
+     */
     public FindCommand(String input) {
         this.KEYWORD = input;
     }
 
+    /**
+     * Find the task with description containing the keyword
+     * @param tasks: List of Tasks
+     * @param keyword: Matching keyword to run find command
+     * @return
+     */
     private List<Task> findMatching(TaskList tasks, String keyword) {
         List<Task> matches = new ArrayList<>();
         for (Task task : tasks.getTasks()) {
@@ -27,6 +37,11 @@ public class FindCommand extends Command{
         return matches;
     }
 
+    /**
+     * StringBuilder to format finding result
+     * @param matches: List of matched Tasks
+     * @return
+     */
     private String formatMatches(List<Task> matches) {
         if (matches.isEmpty()) {
             return NO_TASK_FOUND;

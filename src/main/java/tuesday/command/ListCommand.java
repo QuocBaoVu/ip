@@ -14,9 +14,9 @@ public class ListCommand extends Command {
     /**
      * Execute the list command by printing all tasks in the task list
      * along with their indices
-     * @param tasks
-     * @param ui
-     * @param storage
+     * @param tasks: List of Tasks
+     * @param ui: UI
+     * @param storage: Storage
      */
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) {
@@ -26,10 +26,10 @@ public class ListCommand extends Command {
 
     /**
      * Return the response for the List command
-     * @param tasks
-     * @param ui
-     * @param storage
-     * @return
+     * @param tasks: List of Tasks
+     * @param ui: UI
+     * @param storage: Storage
+     * @return String of response
      */
     @Override
     public String getResponse(TaskList tasks, Ui ui, Storage storage) {

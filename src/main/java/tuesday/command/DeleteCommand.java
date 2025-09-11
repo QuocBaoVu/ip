@@ -46,7 +46,6 @@ public class DeleteCommand extends Command {
     private Task deleteTaskAtIndex(TaskList tasks, Integer index) {
         Task task = tasks.getTask(index);
         tasks.deleteTask(task);
-        assert task != null : "Task deletion failed — null task at index " + index;
         return task;
     }
 

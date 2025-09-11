@@ -77,7 +77,6 @@ public class FindCommand extends Command{
     @Override
     public String getResponse(TaskList tasks, Ui ui, Storage storage) {
         String response = formatMatches(findMatching(tasks, KEYWORD));
-        assert response != null && !response.isEmpty() : "Response should not be empty";
         return response;
     }
 

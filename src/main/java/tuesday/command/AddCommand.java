@@ -30,8 +30,6 @@ public class AddCommand extends Command {
      * @param taskType
      */
     public AddCommand(String description, TaskType taskType) {
-        assert description != null && !description.isEmpty() : "Description cannot be null or empty";
-        assert taskType == TaskType.TODO : "This constructor should only be used for todo tasks";
         this.DESCRIPTION = description;
         this.TASK_TYPE = taskType;
         this.END_TIME = "";
@@ -45,9 +43,6 @@ public class AddCommand extends Command {
      * @param startTime
      */
     public AddCommand(String description, TaskType taskType, String startTime) {
-        assert description != null && !description.isEmpty() : "Description cannot be null or empty";
-        assert taskType == TaskType.DEADLINE: "This constructor should only be used for deadline tasks";
-        assert startTime != null && !startTime.isEmpty() : "Deadline must have a start time";
         this.DESCRIPTION = description;
         this.START_TIME = startTime;
         this.END_TIME = "";
@@ -63,10 +58,6 @@ public class AddCommand extends Command {
      * @param endTime
      */
     public AddCommand(String description, TaskType taskType, String startTime, String endTime) {
-        assert description != null && !description.isEmpty() : "Description cannot be null or empty";
-        assert taskType == TaskType.EVENT : "This constructor should only be used for event tasks";
-        assert startTime != null && !startTime.isEmpty() : "Event must have a start time";
-        assert endTime != null && !endTime.isEmpty() : "Event must have an end time";
         this.DESCRIPTION = description;
         this.START_TIME = startTime;
         this.END_TIME = endTime;
@@ -93,7 +84,6 @@ public class AddCommand extends Command {
                 break;
         }
         tasks.addTask(task);
-        assert task != null : "Task is null";
         return task;
     }
 

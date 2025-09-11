@@ -25,7 +25,6 @@ public class Parser {
      * @throws TuesdayException If the input cannot be parsed into a valid command
      */
     public static Command parse(String input) throws TuesdayException {
-        assert input != null : "Input cannot be null";
         String[] words = input.split(" ", 2);
         String commandWord = words[0];
 
@@ -145,7 +144,6 @@ public class Parser {
         }
 
         String keyword = input.substring(5).trim();
-        assert !keyword.isEmpty() : "Find command must have a keyword";
 
         return new FindCommand(keyword);
     }

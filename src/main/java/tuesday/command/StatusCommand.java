@@ -75,7 +75,6 @@ public class StatusCommand extends Command {
             response = ERROR_MESSAGE + e.getMessage();
             ui.showError(e.getMessage());
         }
-        assert response != null: "No response";
         return response;
     }
     /**

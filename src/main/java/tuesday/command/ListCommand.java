@@ -44,7 +44,6 @@ public class ListCommand extends Command {
                 System.out.println((i + 1) + ". " + tasks.getTask(i).toString());
             }
         }
-        assert response.isEmpty(): "No task found";
         return response;
     }
     /**

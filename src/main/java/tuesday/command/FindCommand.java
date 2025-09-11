@@ -9,11 +9,50 @@ import tuesday.task.TaskList;
 import tuesday.ui.Ui;
 
 public class FindCommand extends Command{
-    private final String INPUT;
+    private final String KEYWORD;
+    private static final String NO_TASK_FOUND = "No matching tasks found";
+    private static final String TASKS_FOUND = "Here are the matching tasks in your list:";
 
+    /**
+     * Constructor for Find Command
+     * @param input: Raw input from Parser
+     */
     public FindCommand(String input) {
-        this.INPUT = input;
+        this.KEYWORD = input;
     }
+
+    /**
+     * Find the task with description containing the keyword
+     * @param tasks: List of Tasks
+     * @param keyword: Matching keyword to run find command
+     * @return
+     */
+    private List<Task> findMatching(TaskList tasks, String keyword) {
+        List<Task> matches = new ArrayList<>();
+        for (Task task : tasks.getTasks()) {
+            if (task.getDescription().toLowerCase().contains(keyword)) {
+                matches.add(task);
+            }
+        }
+        return matches;
+    }
+
+    /**
+     * StringBuilder to format finding result
+     * @param matches: List of matched Tasks
+     * @return
+     */
+    private String formatMatches(List<Task> matches) {
+        if (matches.isEmpty()) {
+            return NO_TASK_FOUND;
+        }
+        StringBuilder stringBuilder = new StringBuilder(TASKS_FOUND).append("\n");
+        for (Task task : matches) {
+            stringBuilder.append(task.getDescription()).append("\n");
+        }
+        return stringBuilder.toString().trim();
+    }
+
 
     /**
      * Execute the "Find" Command
@@ -23,22 +62,9 @@ public class FindCommand extends Command{
      */
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) {
-        List<Task> matchingList = new ArrayList<>();
+        String output = formatMatches(findMatching(tasks, KEYWORD));
+        System.out.println(output);
 
-        for (Task task : tasks.getTasks()) {
-            if (task.getDescription().contains(INPUT)) {
-                matchingList.add(task);
-            }
-        }
-
-        if (matchingList.isEmpty()) {
-            System.out.println("No matching tasks found.");
-        } else {
-            System.out.println("Here are the matching tasks in your list:");
-            for (Task task : matchingList) {
-                System.out.println(task);
-            }
-        }
     }
 
     /**
@@ -50,24 +76,7 @@ public class FindCommand extends Command{
      */
     @Override
     public String getResponse(TaskList tasks, Ui ui, Storage storage) {
-        List<Task> matchingList = new ArrayList<>();
-        String response = "";
-        for (Task task : tasks.getTasks()) {
-            if (task.getDescription().contains(INPUT)) {
-                matchingList.add(task);
-            }
-        }
-        if (matchingList.isEmpty()) {
-            response = "No matching tasks found.";
-            System.out.println(response);
-        } else {
-            System.out.println("Here are the matching tasks in your list:");
-            for (Task task : matchingList) {
-                response = task.getDescription();
-                System.out.println(task);
-            }
-        }
-        assert matchingList.isEmpty() : "No matching tasks found.";
+        String response = formatMatches(findMatching(tasks, KEYWORD));
         return response;
     }
 

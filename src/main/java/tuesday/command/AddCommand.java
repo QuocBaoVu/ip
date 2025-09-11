@@ -2,6 +2,7 @@ package tuesday.command;
 
 import java.time.format.DateTimeParseException;
 
+import tuesday.task.TaskEnums.TaskType;
 import tuesday.storage.Storage;
 import tuesday.task.TodoTask;
 import tuesday.task.EventTask;
@@ -10,22 +11,25 @@ import tuesday.task.TaskList;
 import tuesday.task.Task;
 import tuesday.ui.Ui;
 
-import java.time.format.DateTimeParseException;
 
 public class AddCommand extends Command {
     private final String DESCRIPTION;
     private final String START_TIME;
     private final String END_TIME;
-    private final String TASK_TYPE;
+    private final TaskType TASK_TYPE;
+
+    private static final String ERROR_MESSAGE = "ERROR: ";
+    private static final String SUCCESS_MESSAGE = "Got it. I've added this task:\n";
+    private static final String TIME_FORMAT = "Time format should be: dd-MM-yyyy HHmm";
+
+
 
     /**
      * Construct AddCommend for a todo task
      * @param description
      * @param taskType
      */
-    public AddCommand(String description, String taskType) {
-        assert description != null && !description.isEmpty() : "Description cannot be null or empty";
-        assert taskType.equals("todo") : "This constructor should only be used for todo tasks";
+    public AddCommand(String description, TaskType taskType) {
         this.DESCRIPTION = description;
         this.TASK_TYPE = taskType;
         this.END_TIME = "";
@@ -38,10 +42,7 @@ public class AddCommand extends Command {
      * @param taskType
      * @param startTime
      */
-    public AddCommand(String description, String taskType, String startTime) {
-        assert description != null && !description.isEmpty() : "Description cannot be null or empty";
-        assert taskType.equals("deadline") : "This constructor should only be used for deadline tasks";
-        assert startTime != null && !startTime.isEmpty() : "Deadline must have a start time";
+    public AddCommand(String description, TaskType taskType, String startTime) {
         this.DESCRIPTION = description;
         this.START_TIME = startTime;
         this.END_TIME = "";
@@ -56,15 +57,47 @@ public class AddCommand extends Command {
      * @param startTime
      * @param endTime
      */
-    public AddCommand(String description, String taskType, String startTime, String endTime) {
-        assert description != null && !description.isEmpty() : "Description cannot be null or empty";
-        assert taskType.equals("event") : "This constructor should only be used for event tasks";
-        assert startTime != null && !startTime.isEmpty() : "Event must have a start time";
-        assert endTime != null && !endTime.isEmpty() : "Event must have an end time";
+    public AddCommand(String description, TaskType taskType, String startTime, String endTime) {
         this.DESCRIPTION = description;
         this.START_TIME = startTime;
         this.END_TIME = endTime;
         this.TASK_TYPE = taskType;
+    }
+
+    /**
+     * Create task based on their TaskType
+     * @param tasks: TaskList
+     * @param taskType: Type of Task
+     * @return the created Task
+     */
+    private Task classifyTask(TaskList tasks, TaskType taskType) {
+        Task task = null;
+        switch (taskType) {
+            case TODO:
+                task = new TodoTask(this.DESCRIPTION);
+                break;
+            case DEADLINE:
+                task = new DeadlineTask(this.DESCRIPTION, this.START_TIME);
+                break;
+            case EVENT:
+                task = new EventTask(this.DESCRIPTION, this.START_TIME, this.END_TIME);
+                break;
+        }
+        tasks.addTask(task);
+        return task;
+    }
+
+    /**
+     * Print the message when created a task successfully
+     * @param task: created task
+     * @param tasks: list of tasks
+     * @return String of message
+     */
+    private String printSuccessMessage(Task task, TaskList tasks) {
+        String response = SUCCESS_MESSAGE + task.toString() +
+                "\n" + "Now you have " + tasks.size() + " tasks in the list";
+        System.out.println(response);
+        return response;
     }
 
     /**
@@ -77,29 +110,12 @@ public class AddCommand extends Command {
      */
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) {
-        Task task = null;
         try {
-            switch (TASK_TYPE) {
-            case "todo":
-                task = new TodoTask(this.DESCRIPTION);
-                tasks.addTask(task);
-                break;
-            case "deadline":
-                task = new DeadlineTask(this.DESCRIPTION, this.START_TIME);
-                tasks.addTask(task);
-                break;
-            case "event":
-                task = new EventTask(this.DESCRIPTION, this.START_TIME, this.END_TIME);
-                tasks.addTask(task);
-                break;
-            }
-            assert task != null : "Task creation failed — invalid TASK_TYPE?";
-            System.out.println("Got it. I've added this task:");
-            System.out.println(task);
-            System.out.println("Now you have " + tasks.size() + " tasks in the list");
+            Task task = classifyTask(tasks, TASK_TYPE);
+            printSuccessMessage(task, tasks);
         } catch (DateTimeParseException e) {
             ui.showError(e.getMessage() +
-                    "Time format should be: dd-MM-yyyy HHmm");
+                    TIME_FORMAT);
         }
 
     }
@@ -113,37 +129,15 @@ public class AddCommand extends Command {
      */
     @Override
     public String getResponse(TaskList tasks, Ui ui, Storage storage) {
-        Task task = null;
         String response = "";
         try {
-            switch (TASK_TYPE) {
-                case "todo":
-                    task = new TodoTask(this.DESCRIPTION);
-                    tasks.addTask(task);
-                    break;
-                case "deadline":
-                    task = new DeadlineTask(this.DESCRIPTION, this.START_TIME);
-                    tasks.addTask(task);
-                    break;
-                case "event":
-                    task = new EventTask(this.DESCRIPTION, this.START_TIME, this.END_TIME);
-                    tasks.addTask(task);
-                    break;
-            }
-            if (task == null) {
-                throw new NullPointerException("task is null");
-            }
-            response = "Got it. I've added this task:\n" + task.toString() +
-                    "\n" + "Now you have " + tasks.size() + " tasks in the list";
-            System.out.println(response);
+            Task task = classifyTask(tasks, TASK_TYPE);
+            response = printSuccessMessage(task, tasks);
         } catch (DateTimeParseException e) {
-            response = "Error: " + e.getMessage() +
-                    " Time format should be: dd-MM-yyyy HHmm";
-            ui.showError(response);
-        } catch (NullPointerException e) {
-            response = "Error: " + e.getMessage();
+            response = ERROR_MESSAGE + e.getMessage() + TIME_FORMAT;
             ui.showError(response);
         }
+
         return response;
 
     }

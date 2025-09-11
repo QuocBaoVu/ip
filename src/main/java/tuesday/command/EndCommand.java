@@ -11,6 +11,7 @@ import tuesday.ui.Ui;
  * shows exit messages to the user
  */
 public class EndCommand extends Command {
+    private final String ERROR_MESSAGE = "ERROR: ";
     /**
      *  Execute the exit command by saving the current tasks to storage
      *  and displaying exit messages to the user
@@ -46,7 +47,7 @@ public class EndCommand extends Command {
             ui.showDataSaved();
         } catch (Exception e) {
             ui.showError(e.getMessage());
-            return "Error: " + e.getMessage();
+            return ERROR_MESSAGE + e.getMessage();
 
         }
         ui.showExit();

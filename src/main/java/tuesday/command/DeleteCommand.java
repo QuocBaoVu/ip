@@ -63,6 +63,7 @@ public class DeleteCommand extends Command {
             ui.showError(e.getMessage());
             response = "Error: " + e.getMessage();
         }
+        assert task != null: "Task is null";
         return response;
     }
 

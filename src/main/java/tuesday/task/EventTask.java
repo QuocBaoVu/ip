@@ -24,8 +24,10 @@ public class EventTask extends Task{
      */
     public EventTask(String description, String start, String end) {
         super(description);
-            this.startTime = LocalDateTime.parse(start.trim(), INPUT_FORMATTER);
-            this.endTime = LocalDateTime.parse(end.trim(), INPUT_FORMATTER);
+        assert start != null: "start cannot be null";
+        assert end != null: "end cannot be null";
+        this.startTime = LocalDateTime.parse(start.trim(), INPUT_FORMATTER);
+        this.endTime = LocalDateTime.parse(end.trim(), INPUT_FORMATTER);
 
         DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HHmm");
         this.startTime = LocalDateTime.parse(start.trim(), inputFormatter);

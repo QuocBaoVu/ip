@@ -39,7 +39,7 @@ public class ListCommand extends Command {
     public String getResponse(TaskList tasks, Ui ui, Storage storage) {
         String response = "";
         if (tasks.getTasks().isEmpty()) {
-            response = "No tasks found";
+            response = "No task found";
             System.out.println(response);
         } else {
             System.out.println("Here are the tasks in your list:");
@@ -48,6 +48,7 @@ public class ListCommand extends Command {
                 System.out.println((i + 1) + "." + tasks.getTask(i).toString());
             }
         }
+        assert response.isEmpty(): "No task found";
         return response;
     }
     /**

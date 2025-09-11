@@ -24,6 +24,8 @@ public class AddCommand extends Command {
      * @param taskType
      */
     public AddCommand(String description, String taskType) {
+        assert description != null && !description.isEmpty() : "Description cannot be null or empty";
+        assert taskType.equals("todo") : "This constructor should only be used for todo tasks";
         this.DESCRIPTION = description;
         this.TASK_TYPE = taskType;
         this.END_TIME = "";
@@ -37,6 +39,9 @@ public class AddCommand extends Command {
      * @param startTime
      */
     public AddCommand(String description, String taskType, String startTime) {
+        assert description != null && !description.isEmpty() : "Description cannot be null or empty";
+        assert taskType.equals("deadline") : "This constructor should only be used for deadline tasks";
+        assert startTime != null && !startTime.isEmpty() : "Deadline must have a start time";
         this.DESCRIPTION = description;
         this.START_TIME = startTime;
         this.END_TIME = "";
@@ -52,6 +57,10 @@ public class AddCommand extends Command {
      * @param endTime
      */
     public AddCommand(String description, String taskType, String startTime, String endTime) {
+        assert description != null && !description.isEmpty() : "Description cannot be null or empty";
+        assert taskType.equals("event") : "This constructor should only be used for event tasks";
+        assert startTime != null && !startTime.isEmpty() : "Event must have a start time";
+        assert endTime != null && !endTime.isEmpty() : "Event must have an end time";
         this.DESCRIPTION = description;
         this.START_TIME = startTime;
         this.END_TIME = endTime;
@@ -84,7 +93,7 @@ public class AddCommand extends Command {
                 tasks.addTask(task);
                 break;
             }
-
+            assert task != null : "Task creation failed — invalid TASK_TYPE?";
             System.out.println("Got it. I've added this task:");
             System.out.println(task);
             System.out.println("Now you have " + tasks.size() + " tasks in the list");

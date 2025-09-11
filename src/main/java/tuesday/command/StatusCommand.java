@@ -52,9 +52,10 @@ public class StatusCommand extends Command {
 
     @Override
     public String getResponse(TaskList tasks, Ui ui, Storage storage) {
-        String response;
+        String response = "";
         try {
-            Task task = tasks.getTask(Integer.parseInt(INDEX) - 1);
+            int task_id = Integer.parseInt(INDEX) - 1;
+            Task task = tasks.getTask(task_id);
             switch (TYPE) {
                 case "mark":
                     task.markDone();
@@ -71,6 +72,7 @@ public class StatusCommand extends Command {
             response = "Error: " + e.getMessage();
             ui.showError(e.getMessage());
         }
+        assert response != null: "No response";
         return response;
     }
     /**

@@ -21,6 +21,7 @@ public class DeadlineTask extends Task {
      */
     public DeadlineTask(String description, String deadline) {
         super(description);
+        assert deadline != null: "deadline cannot be null";
         this.deadlineTime = LocalDateTime.parse(deadline, INPUT_FORMATTER);
     }
 

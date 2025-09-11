@@ -67,6 +67,7 @@ public class FindCommand extends Command{
                 System.out.println(task);
             }
         }
+        assert matchingList.isEmpty() : "No matching tasks found.";
         return response;
     }
 

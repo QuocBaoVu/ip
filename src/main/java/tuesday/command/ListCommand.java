@@ -9,6 +9,8 @@ import tuesday.ui.Ui;
  * Print each task with its index to the console
  */
 public class ListCommand extends Command {
+    private static final String NO_TASK_FOUND = "No tasks found";
+    private static final String TASKS_FOUND = "Here are the tasks in your list:";
     /**
      * Execute the list command by printing all tasks in the task list
      * along with their indices
@@ -18,14 +20,8 @@ public class ListCommand extends Command {
      */
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) {
-        if (tasks.getTasks().isEmpty()) {
-            System.out.println("No tasks found");
-        } else {
-            System.out.println("Here are the tasks in your list:");
-            for (int i = 0; i < tasks.size(); i++) {
-                System.out.println((i + 1) + "." + tasks.getTask(i).toString());
-            }
-        }
+        String response = getResponse(tasks, ui, storage);
+        System.out.println(response);
     }
 
     /**
@@ -39,13 +35,13 @@ public class ListCommand extends Command {
     public String getResponse(TaskList tasks, Ui ui, Storage storage) {
         String response = "";
         if (tasks.getTasks().isEmpty()) {
-            response = "No task found";
+            response = NO_TASK_FOUND;
             System.out.println(response);
         } else {
-            System.out.println("Here are the tasks in your list:");
+            System.out.println(TASKS_FOUND);
             for (int i = 0; i < tasks.size(); i++) {
-                response += (i + 1) + "." + tasks.getTask(i).toString() + "\n";
-                System.out.println((i + 1) + "." + tasks.getTask(i).toString());
+                response += (i + 1) + ". " + tasks.getTask(i).toString() + "\n";
+                System.out.println((i + 1) + ". " + tasks.getTask(i).toString());
             }
         }
         assert response.isEmpty(): "No task found";

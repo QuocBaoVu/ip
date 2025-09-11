@@ -4,69 +4,88 @@ import tuesday.storage.Storage;
 import tuesday.task.Task;
 import tuesday.task.TaskList;
 import tuesday.ui.Ui;
+
 /**
- * Represent a command to delete a task from the task list
+ * Represent a command to delete a task from the task list.
  * Take an index, finds the corresponding task in the list,
  * remove it, and display a confirmation message to the user.
  */
 public class DeleteCommand extends Command {
-    private final String INDEX;
-
-    private String index;
+    private final Integer INDEX;
+    private final String SUCCESS_MESSAGE = "Noted. I've removed this task: \n";
+    private final String ERROR_MESSAGE = "ERROR: ";
 
     /**
-     * Construct a DeleteCommand with the specified task index
-     * @param index
+     * Construct a DeleteCommand with the specified task index.
+     *
+     * @param index Task index
      */
     public DeleteCommand(String index) {
-        this.INDEX = index;
+        this.INDEX = Integer.parseInt(index) - 1;
+    }
+
+    private String printSuccessMessage(Task task, TaskList tasks) {
+        String response = SUCCESS_MESSAGE + task.toString() + "\n"
+                + "Now you have " + tasks.size() + " tasks in the list";
+        System.out.println(response);
+        return response;
+    }
+
+    private Task deleteTaskAtIndex(TaskList tasks, Integer index) {
+        Task task = tasks.getTask(index);
+        tasks.deleteTask(task);
+        assert task != null : "Task deletion failed — null task at index " + index;
+        return task;
     }
 
 
     /**
-     * Executes the delete command by removing the task
-     * @param tasks
-     * @param ui
-     * @param storage
+     * Executes the delete command by removing the task.
+     *
+     * @param tasks   Task list
+     * @param ui      UI handler
+     * @param storage Storage handler
      */
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) {
         try {
-            Task task = tasks.getTask(Integer.parseInt(INDEX) - 1);
-            tasks.deleteTask(task);
-            System.out.println("Noted. I've removed this task:");
-            System.out.println(task.toString());
-            System.out.println("Now you have " + tasks.size() + " tasks in the list");
-
-        } catch (IndexOutOfBoundsException | NumberFormatException e ) {
-            ui.showError(e.getMessage());
+            Task task = deleteTaskAtIndex(tasks, INDEX);
+            printSuccessMessage(task, tasks);
+        } catch (NumberFormatException e) {
+            ui.showError("Invalid task index! Please enter a number.");
+        } catch (IndexOutOfBoundsException e) {
+            ui.showError("Task index out of range! Please enter a valid index.");
         }
+
     }
 
     /**
+     * Executes and returns the response.
      *
-     * @param tasks
-     * @param ui
-     * @param storage
-     * @return
+     * @param tasks   Task list
+     * @param ui      UI handler
+     * @param storage Storage handler
+     * @return Response string
      */
     @Override
     public String getResponse(TaskList tasks, Ui ui, Storage storage) {
-        Task task = null;
         String response = "";
         try {
-            task = tasks.getTask(Integer.parseInt(INDEX) - 1);
-            tasks.deleteTask(task);
-            response = "Noted. I've removed this task:\n" + task.toString() + "\n" + "Now you have " + tasks.size() + " tasks in the list";
-            System.out.println(response);
-        } catch (IndexOutOfBoundsException | NumberFormatException e ) {
-            ui.showError(e.getMessage());
-            response = "Error: " + e.getMessage();
+            Task task = deleteTaskAtIndex(tasks, INDEX);
+            response = printSuccessMessage(task, tasks);
+        } catch (NumberFormatException e) {
+            String msg = ERROR_MESSAGE + "Invalid task index.";
+            ui.showError(msg);
+            return msg;
+        } catch (IndexOutOfBoundsException e) {
+            String msg = ERROR_MESSAGE + "Task index out of range.";
+            ui.showError(msg);
+            return msg;
         }
-        assert task != null: "Task is null";
         return response;
     }
 
+    @Override
     public boolean isExit() {
         return false;
     }

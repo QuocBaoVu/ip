@@ -4,6 +4,10 @@ import java.util.Scanner;
 
 public class Ui {
     private Scanner sc;
+    private final String HELLO_MESSAGE = """
+            Hello! I'm Tuesday
+            What can I do for you?
+            """;
 
     public Ui() {
         sc = new Scanner(System.in);

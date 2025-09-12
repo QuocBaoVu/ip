@@ -14,9 +14,10 @@ import tuesday.task.TaskEnums.TaskType;
 
 public class Parser {
 
-    private static final String TODO_FORMAT = "Use format: todo <desc>";
-    private static final String DEADLINE_FORMAT = "Use format: deadline <desc> /by dd-MM-yyyy HHmm";
-    private static final String EVENT_FORMAT = "Use format: event <desc> /from dd-MM-yyyy HHmm /to dd-MM-yyyy HHmm";
+    private static final String USE_FORMAT = "Use format: ";
+    private static final String TODO_FORMAT = USE_FORMAT + "todo <desc>";
+    private static final String DEADLINE_FORMAT = USE_FORMAT + "deadline <desc> /by dd-MM-yyyy HHmm";
+    private static final String EVENT_FORMAT = USE_FORMAT + "event <desc> /from dd-MM-yyyy HHmm /to dd-MM-yyyy HHmm";
     private static final String MISSING_INDEX = "Missing task index!";
     /**
      * Parse a user input string and returns a corresponding command object.

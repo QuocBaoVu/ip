@@ -1,5 +1,7 @@
 package tuesday.task;
 
+import java.time.LocalDateTime;
+
 /**
  *  Implementation of TodoTask Class
  */
@@ -33,5 +35,15 @@ public class TodoTask extends Task {
         return String.format("[T][%s] %s",
                 this.isDone() ? "X" : " " ,
                 this.getDescription());
+    }
+
+    @Override
+    public TaskEnums.TaskType getTaskType() {
+        return TaskEnums.TaskType.TODO;
+    }
+
+    @Override
+    public LocalDateTime getLDTTime() {
+        return null;
     }
 }

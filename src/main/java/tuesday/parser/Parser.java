@@ -1,12 +1,6 @@
 package tuesday.parser;
 
-import tuesday.command.AddCommand;
-import tuesday.command.DeleteCommand;
-import tuesday.command.StatusCommand;
-import tuesday.command.Command;
-import tuesday.command.EndCommand;
-import tuesday.command.ListCommand;
-import tuesday.command.FindCommand;
+import tuesday.command.*;
 import tuesday.exception.TuesdayException;
 import tuesday.command.CommandEnums.StatusAction;
 import tuesday.task.TaskEnums.TaskType;
@@ -57,7 +51,10 @@ public class Parser {
 
         case "find":
             return parseFind(input);
-
+        case "sort-type":
+            return parseSortByType(input);
+        case "sort-time":
+            return parseSortByTime(input);
         default:
             throw new TuesdayException("Invalid command!");
         }
@@ -161,4 +158,28 @@ public class Parser {
         }
         return new DeleteCommand(words[1].trim());
     }
+
+
+    private static Command parseSort(String input, CommandEnums.SortAction action) throws TuesdayException {
+        // sort-type /by <type> OR sort-time /by <time>
+        if (!input.contains("/by")) {
+            throw new TuesdayException("Invalid sort by format.");
+        }
+        String[] parts = input.split(" /by ", 2);
+        if (parts.length != 2) {
+            throw new TuesdayException("Invalid sort by format.");
+        }
+
+        TaskType type = TaskType.valueOf(parts[1].trim().toUpperCase());
+        return new SortCommand(action, type);
+    }
+
+    private static Command parseSortByType(String input) throws TuesdayException {
+        return parseSort(input, CommandEnums.SortAction.TYPE);
+    }
+
+    private static Command parseSortByTime(String input) throws TuesdayException {
+        return parseSort(input, CommandEnums.SortAction.TIME);
+    }
+
 }

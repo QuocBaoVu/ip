@@ -13,6 +13,8 @@ public class Parser {
     private static final String DEADLINE_FORMAT = USE_FORMAT + "deadline <desc> /by dd-MM-yyyy HHmm";
     private static final String EVENT_FORMAT = USE_FORMAT + "event <desc> /from dd-MM-yyyy HHmm /to dd-MM-yyyy HHmm";
     private static final String MISSING_INDEX = "Missing task index!";
+    private static final String SORT_TIME_FORMAT = USE_FORMAT + "sort-time /by <type>";
+    private static final String SORT_TYPE_FORMAT = USE_FORMAT + "sort-type /by <type>";
     /**
      * Parse a user input string and returns a corresponding command object.
      * @param input: Input from user
@@ -35,10 +37,7 @@ public class Parser {
             return parseStatus(words, commandWord);
 
         case "delete":
-            if (words.length < 2) {
-                throw new TuesdayException("Missing task index to delete!");
-            }
-            return new DeleteCommand(words[1]);
+            return parseDelete(words);
 
         case "todo":
             return parseTodo(words);
@@ -109,7 +108,7 @@ public class Parser {
     }
 
     /**
-     * Parse a command to add a Event task
+     * Parse a command to add Event task
      * @param input: The untouched input from user
      * @return AddCommend with Event constructor
      * @throws TuesdayException
@@ -159,25 +158,43 @@ public class Parser {
         return new DeleteCommand(words[1].trim());
     }
 
-
+    /**
+     * Parse any sort command in exist in this app
+     * @param input: Raw input from user
+     * @param action: Sort by time or type
+     * @return SortCommand
+     * @throws TuesdayException
+     */
     private static Command parseSort(String input, CommandEnums.SortAction action) throws TuesdayException {
         // sort-type /by <type> OR sort-time /by <time>
         if (!input.contains("/by")) {
-            throw new TuesdayException("Invalid sort by format.");
+            throw new TuesdayException("Invalid sort by format. " + SORT_TIME_FORMAT + " or "  + SORT_TYPE_FORMAT);
         }
         String[] parts = input.split(" /by ", 2);
         if (parts.length != 2) {
-            throw new TuesdayException("Invalid sort by format.");
+            throw new TuesdayException("Invalid sort by format. " + SORT_TIME_FORMAT + " or "  + SORT_TYPE_FORMAT);
         }
 
         TaskType type = TaskType.valueOf(parts[1].trim().toUpperCase());
         return new SortCommand(action, type);
     }
 
+    /**
+     * Parse Sort-type command
+     * @param input: raw input from user
+     * @return Command the parse-sort
+     * @throws TuesdayException
+     */
     private static Command parseSortByType(String input) throws TuesdayException {
         return parseSort(input, CommandEnums.SortAction.TYPE);
     }
 
+    /**
+     * Parse Sort-time command
+     * @param input: raw input from user
+     * @return Command the parse-sort
+     * @throws TuesdayException
+     */
     private static Command parseSortByTime(String input) throws TuesdayException {
         return parseSort(input, CommandEnums.SortAction.TIME);
     }

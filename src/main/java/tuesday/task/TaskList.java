@@ -37,7 +37,6 @@ public class TaskList {
     public int size() {
         return tasks.size();
     }
-
     public TaskList filterTaskByType(TaskType type) {
         Stream<Task> stream = this.tasks.stream();
         return new TaskList(stream.filter(task -> task.getTaskType() == type).toList());

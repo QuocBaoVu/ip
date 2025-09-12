@@ -50,11 +50,19 @@ public class DeadlineTask extends Task {
         return this.deadlineTime.format(OUTPUT_FORMATTER);
     }
 
+    /**
+     * Return TaskType
+     * @return
+     */
     @Override
     public TaskEnums.TaskType getTaskType() {
         return TaskEnums.TaskType.DEADLINE;
     }
 
+    /**
+     * Return the LocalDateTime
+     * @return
+     */
     @Override
     public LocalDateTime getLDTTime() {
         return this.deadlineTime;

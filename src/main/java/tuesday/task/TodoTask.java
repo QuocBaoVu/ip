@@ -37,11 +37,19 @@ public class TodoTask extends Task {
                 this.getDescription());
     }
 
+    /**
+     * Return TaskType
+     * @return
+     */
     @Override
     public TaskEnums.TaskType getTaskType() {
         return TaskEnums.TaskType.TODO;
     }
 
+    /**
+     * Return the LocalDateTime
+     * @return
+     */
     @Override
     public LocalDateTime getLDTTime() {
         return null;

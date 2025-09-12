@@ -69,6 +69,24 @@ public class EventTask extends Task{
         return this.endTime.format(OUTPUT_FORMATTER);
     }
 
+    /**
+     * Return TaskType
+     * @return
+     */
+    @Override
+    public TaskEnums.TaskType getTaskType() {
+        return TaskEnums.TaskType.EVENT;
+    }
+
+    /**
+     * Return the LocalDateTime
+     * @return
+     */
+    @Override
+    public LocalDateTime getLDTTime() {
+        return this.startTime;
+    }
+
     @Override
     public String toString() {
             return String.format("[E][%s] %s (FROM %s TO %s)",

@@ -10,8 +10,6 @@ import tuesday.storage.Storage;
 import tuesday.task.TaskList;
 import tuesday.ui.Ui;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 
 /**
  * Main entry point for Tuesday chatbot
@@ -19,6 +17,8 @@ import java.io.FileNotFoundException;
  */
 
 public class Tuesday {
+
+    private static final String STORAGE_URL = "/data/tuesday.txt";
 
     private Storage storage;
     private TaskList tasks;
@@ -53,7 +53,7 @@ public class Tuesday {
     public static void main(String[] args) {
         // Load data from data/tuesday.txt to list
         String projectPath = System.getProperty("user.dir");
-        String filePath = projectPath + "/data/tuesday.txt";
+        String filePath = projectPath + STORAGE_URL;
 
         File file = new File(filePath);
         File parent = file.getParentFile();

@@ -1,8 +1,11 @@
 package tuesday.task;
 
+import java.time.LocalDateTime;
+
 public abstract class Task {
     private String description;
     private boolean isDone;
+    private TaskEnums.TaskType type;
 
     public Task(String description) {
         this.description = description;
@@ -31,6 +34,10 @@ public abstract class Task {
     }
 
     public abstract String getType();
+
+    public abstract TaskEnums.TaskType getTaskType();
+
+    public abstract LocalDateTime getLDTTime();
 
     public abstract String getTime();
 

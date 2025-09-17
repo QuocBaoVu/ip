@@ -1,9 +1,20 @@
 package tuesday.parser;
 
-import tuesday.command.*;
+import tuesday.command.Command;
+import tuesday.command.ListCommand;
+import tuesday.command.EndCommand;
+import tuesday.command.AddCommand;
+import tuesday.command.DeleteCommand;
+import tuesday.command.StatusCommand;
+import tuesday.command.SortCommand;
+import tuesday.command.FindCommand;
+import tuesday.command.CommandEnums;
 import tuesday.exception.TuesdayException;
 import tuesday.command.CommandEnums.StatusAction;
 import tuesday.task.TaskEnums.TaskType;
+
+import java.util.Arrays;
+import java.util.Map;
 
 
 public class Parser {
@@ -15,6 +26,16 @@ public class Parser {
     private static final String MISSING_INDEX = "Missing task index!";
     private static final String SORT_TIME_FORMAT = USE_FORMAT + "sort-time /by <type>";
     private static final String SORT_TYPE_FORMAT = USE_FORMAT + "sort-type /by <type>";
+    private static final String LIST_COMMAND = "\"'. Valid commands include: todo, deadline, " +
+            "event, list, mark, unmark, delete, find, sort-type, sort-time, bye.\"";
+
+
+    private static final Map<String, CommandEnums.SortAction> SORT_COMMANDS = Map.of(
+            "sort-type", CommandEnums.SortAction.TYPE,
+            "sort-time", CommandEnums.SortAction.TIME
+    );
+
+
     /**
      * Parse a user input string and returns a corresponding command object.
      * @param input: Input from user
@@ -22,6 +43,11 @@ public class Parser {
      * @throws TuesdayException If the input cannot be parsed into a valid command
      */
     public static Command parse(String input) throws TuesdayException {
+
+        if (input == null || input.trim().isEmpty()) {
+            throw new TuesdayException("Empty input! Please enter a command.");
+        }
+
         String[] words = input.split(" ", 2);
         String commandWord = words[0];
 
@@ -51,11 +77,12 @@ public class Parser {
         case "find":
             return parseFind(input);
         case "sort-type":
-            return parseSortByType(input);
         case "sort-time":
-            return parseSortByTime(input);
+            return parseSort(input, SORT_COMMANDS.get(commandWord));
         default:
-            throw new TuesdayException("Invalid command!");
+            throw new TuesdayException(
+                    "Unknown command: '" + commandWord + LIST_COMMAND
+            );
         }
     }
 
@@ -94,17 +121,14 @@ public class Parser {
      * @throws TuesdayException
      */
     private static Command parseDeadline(String input) throws TuesdayException {
-        if (!input.contains("/by")) {
-            throw new TuesdayException("Missing deadline time. " + DEADLINE_FORMAT);
+        String content = input.replaceFirst("(?i)^deadline\\s+", "");
+        String[] parts = content.split("\\s*/by\\s*", 2);
+
+        if (parts.length != 2) {
+            throw new TuesdayException("Invalid deadline format. " + DEADLINE_FORMAT);
         }
-            String deadlineContent = input.substring(9); // remove "deadline "
-            String[] parts = deadlineContent.split(" /by ", 2);
 
-            if (parts.length != 2) {
-                throw new TuesdayException("Invalid deadline format. " + DEADLINE_FORMAT);
-            }
-
-            return new AddCommand(parts[0].trim(), TaskType.DEADLINE, parts[1].trim());
+        return new AddCommand(parts[0].trim(), TaskType.DEADLINE, parts[1].trim());
     }
 
     /**
@@ -114,18 +138,12 @@ public class Parser {
      * @throws TuesdayException
      */
     private static Command parseEvent(String input) throws TuesdayException {
-        if (!input.contains("/from") || !input.contains("/to")) {
-            throw new TuesdayException("Invalid event format. " + EVENT_FORMAT);
-        }
-
-        String eventContent = input.substring(6); // remove "event "
-        String regex = "/from | /to";
-        String[] parts = eventContent.split(regex, 3);
+        String content = input.replaceFirst("(?i)^event\\s+", "");
+        String[] parts = content.split("\\s*/from\\s*|\\s*/to\\s*", 3);
 
         if (parts.length != 3) {
             throw new TuesdayException("Invalid event format. " + EVENT_FORMAT);
         }
-
         return new AddCommand(parts[0].trim(), TaskType.EVENT, parts[1].trim(), parts[2].trim());
     }
 
@@ -136,13 +154,11 @@ public class Parser {
      * @throws TuesdayException
      */
     private static Command parseFind(String input) throws TuesdayException {
-        if (input.trim().equals("find")) {
-            throw new TuesdayException("Missing find keyword!");
+        String content = input.replaceFirst("(?i)^find\\s*", "").trim();
+        if (content.isEmpty()) {
+            throw new TuesdayException("Missing find keyword! Example: find book");
         }
-
-        String keyword = input.substring(5).trim();
-
-        return new FindCommand(keyword);
+        return new FindCommand(content);
     }
 
     /**
@@ -168,35 +184,19 @@ public class Parser {
     private static Command parseSort(String input, CommandEnums.SortAction action) throws TuesdayException {
         // sort-type /by <type> OR sort-time /by <time>
         if (!input.contains("/by")) {
-            throw new TuesdayException("Invalid sort by format. " + SORT_TIME_FORMAT + " or "  + SORT_TYPE_FORMAT);
+            throw new TuesdayException("Invalid sort format. " + SORT_TIME_FORMAT + " or " + SORT_TYPE_FORMAT);
         }
-        String[] parts = input.split(" /by ", 2);
+
+        String[] parts = input.split("\\s*/by\\s*", 2);
         if (parts.length != 2) {
-            throw new TuesdayException("Invalid sort by format. " + SORT_TIME_FORMAT + " or "  + SORT_TYPE_FORMAT);
+            throw new TuesdayException("Invalid sort format. " + SORT_TIME_FORMAT + " or " + SORT_TYPE_FORMAT);
         }
 
-        TaskType type = TaskType.valueOf(parts[1].trim().toUpperCase());
-        return new SortCommand(action, type);
+        try {
+            TaskType type = TaskType.valueOf(parts[1].trim().toUpperCase());
+            return new SortCommand(action, type);
+        } catch (IllegalArgumentException e) {
+            throw new TuesdayException("Unknown task type for sorting: " + parts[1].trim());
+        }
     }
-
-    /**
-     * Parse Sort-type command
-     * @param input: raw input from user
-     * @return Command the parse-sort
-     * @throws TuesdayException
-     */
-    private static Command parseSortByType(String input) throws TuesdayException {
-        return parseSort(input, CommandEnums.SortAction.TYPE);
-    }
-
-    /**
-     * Parse Sort-time command
-     * @param input: raw input from user
-     * @return Command the parse-sort
-     * @throws TuesdayException
-     */
-    private static Command parseSortByTime(String input) throws TuesdayException {
-        return parseSort(input, CommandEnums.SortAction.TIME);
-    }
-
 }

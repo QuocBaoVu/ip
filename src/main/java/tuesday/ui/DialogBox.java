@@ -1,4 +1,4 @@
-package tuesday;
+package tuesday.ui;
 
 import java.io.IOException;
 import java.util.Collections;

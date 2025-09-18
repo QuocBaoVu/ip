@@ -1,4 +1,4 @@
-package tuesday;
+package tuesday.ui;
 
 import javafx.application.Application;
 /**
